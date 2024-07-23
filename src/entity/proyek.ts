@@ -6,5 +6,6 @@ export default interface ProyekEntity {
     proyek: {
         id: number;
         nama_proyek: string
+        proyek_status:"open" | "closed"
     }
 }

@@ -15,7 +15,7 @@ interface IAuthProvider {
   children: JSX.Element;
 }
 interface IValue {
-  user: UserEntity | unknown;
+  user: UserEntity | null;
   login: any;
   logout: any;
 }

@@ -4,17 +4,19 @@ import {useGetList} from "../hooks/useApi";
 import ProyekEntity from "../entity/proyek";
 import {useHistory} from "react-router";
 import SkeletonList from "./shared/skeleton-list";
+import { useAuth } from '../providers/AuthProvider';
 
 const Proyek: React.FC = () => {
     const history = useHistory()
+    const {user} = useAuth()
     const {data, isLoading, refetch} = useGetList<ProyekEntity[]>({
         name: "proyek",
-        endpoint: "/listproyek/5",
+        endpoint: `/listproyek/${user?.id}`,
         params: {}
     })
 
     function handleProyekClick(item: ProyekEntity) {
-        history.push(`/proyek/${item.id_proyek}`)
+        history.push(`/proyek/${item.id_proyek}?status=${item.proyek.proyek_status}`)
     }
 
     return (
@@ -44,8 +46,8 @@ const Proyek: React.FC = () => {
                                 <List.Item onClick={() => handleProyekClick(item)}>
                                     <List.Item.Meta
                                         // title={<Link to={`/detail/${item?.id_proyek}`}>{item?.nama_media}</Link>}
-                                        title={item?.nama_media}
-                                        description={item?.proyek?.nama_proyek}
+                                        title={`${index+1}. ${item?.proyek?.nama_proyek}`}
+                                        description={<div className='capitalize'><b>Status :</b> {item?.proyek?.proyek_status}</div>}
                                     />
                                 </List.Item>
                             )}

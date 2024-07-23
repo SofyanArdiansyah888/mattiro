@@ -1,7 +1,7 @@
 import {IonContent, IonPage, IonRefresher, IonRefresherContent} from '@ionic/react';
 import {Button, Empty, FloatButton, Image, message, Popconfirm} from "antd";
 import {DeleteOutlined, LeftOutlined, PlusCircleOutlined} from "@ant-design/icons"
-import {useHistory, useParams} from "react-router";
+import {useHistory, useParams, useLocation} from "react-router";
 import {useState} from "react";
 import {useDelete, useGetList} from "../hooks/useApi";
 import MediaDetailEntity from "../entity/media-detail";
@@ -10,6 +10,10 @@ import SkeletonList from "./shared/skeleton-list";
 
 const MediaDetailPage: React.FC = () => {
     const history = useHistory()
+    const useQuery = () => {
+        return new URLSearchParams(useLocation().search);
+      };
+      const query = useQuery();
     const params = useParams<{
         idMedia: string,
         idUser: string
@@ -92,6 +96,8 @@ const MediaDetailPage: React.FC = () => {
                                             <p>{item.deskripsi}</p>
                                         </div>
                                         <div className={"space-x-1"}>
+                                            {
+                                            query.get("status") === 'open' &&
                                             <Popconfirm
                                                 placement="left"
                                                 title={"Hapus"}
@@ -109,7 +115,7 @@ const MediaDetailPage: React.FC = () => {
                                                     }}
                                                     icon={<DeleteOutlined/>}
                                                 />
-                                            </Popconfirm>
+                                            </Popconfirm>}
                                         </div>
 
                                     </div>
@@ -117,12 +123,16 @@ const MediaDetailPage: React.FC = () => {
                             }
                         </div>
                 }
-                <FloatButton
+                {
+                     query.get("status") === 'open' &&
+                    <FloatButton
                     icon={<PlusCircleOutlined/>}
                     shape={"circle"}
                     type={"primary"}
                     onClick={() => setModal(true)}
                 />
+                }
+                
 
                 <DetailModal
                     isOpen={modal}

@@ -19,8 +19,8 @@ export default function LoginPage() {
         endpoint: "/login",
         name: "login",
         options: {
-            onSuccess: (data) => {
-                auth.login(data)
+            onSuccess: (data:any) => {
+                auth.login(data.user)
                 history.push("/proyek")
             },
             onError: async (error:any) => {
