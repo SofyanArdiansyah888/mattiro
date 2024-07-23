@@ -10,7 +10,7 @@ import {AuthProvider} from "./providers/AuthProvider";
 const queryClient = new QueryClient({
     defaultOptions: {
         queries: {
-            refetchOnWindowFocus: false
+            refetchOnWindowFocus: false,
         }
     }
 });

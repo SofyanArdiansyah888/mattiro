@@ -1,19 +1,20 @@
 import {IonContent, IonPage, IonRefresher, IonRefresherContent} from '@ionic/react';
-import {Button, List, Skeleton} from "antd";
+import {Button, List} from "antd";
 import {useGetList} from "../hooks/useApi";
 import ProyekEntity from "../entity/proyek";
 import {LeftOutlined} from "@ant-design/icons";
 import {useHistory} from "react-router";
+import SkeletonList from "./shared/skeleton-list";
 
 const MediaPage: React.FC = () => {
     const history = useHistory()
-    const {data,isLoading,refetch} = useGetList<ProyekEntity[]>({
+    const {data, isLoading, refetch} = useGetList<ProyekEntity[]>({
         name: "proyek_media",
-        endpoint:"/proyekmedia/5",
-        params:{}
+        endpoint: "/proyekmedia/5",
+        params: {}
     })
 
-    function handleMediaClick(item: ProyekEntity){
+    function handleMediaClick(item: ProyekEntity) {
         history.push(`/proyek/${item.id}/${item.id_user}`)
     }
 
@@ -43,14 +44,8 @@ const MediaPage: React.FC = () => {
                 </div>
                 {
                     isLoading ?
-                        <div className={"p-4 space-y-2"}>
-                            {
-                                [1,2,3,4].map(() => <Skeleton active={isLoading} loading={isLoading}/>)
-                            }
-
-                        </div>
-
-                        :      <List
+                        <SkeletonList isLoading={isLoading}/>
+                        : <List
                             itemLayout="horizontal"
                             dataSource={data}
                             className={"px-4"}
@@ -59,7 +54,7 @@ const MediaPage: React.FC = () => {
                                     <List.Item.Meta
                                         // title={<Link to={`/detail/${item?.id_proyek}`}>{item?.nama_media}</Link>}
                                         title={item?.nama_media}
-                                        description={item?.proyek?.nama_proyek}
+                                        // description={item?.proyek?.nama_proyek}
                                     />
                                 </List.Item>
                             )}

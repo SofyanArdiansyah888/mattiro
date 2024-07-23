@@ -1,5 +1,5 @@
 import {Redirect, Route} from 'react-router-dom';
-import {IonApp, IonRouterOutlet, setupIonicReact} from '@ionic/react';
+import {IonApp, IonRouterOutlet, setupIonicReact, useIonRouter} from '@ionic/react';
 import {IonReactRouter} from '@ionic/react-router';
 import Proyek from './pages/proyek';
 
@@ -35,44 +35,57 @@ import '@ionic/react/css/palettes/high-contrast.system.css';
 import MediaPage from "./pages/media";
 import MediaDetailPage from "./pages/media-detail";
 import {ProtectedRoute} from "./components/routes/protected-route";
-
+import {useEffect} from "react";
+import { App as CapApp } from "@capacitor/app";
 setupIonicReact();
 
-const App: React.FC = () => (
-    <IonApp>
-        <IonReactRouter>
-            <IonRouterOutlet>
-                <Route exact
-                       path="/proyek"
-                       render={() =>
-                           // <ProtectedRoute>
-                               <Proyek/>
-                           // </ProtectedRoute>
-                       }
-                />
-                <Route exact
-                       path="/proyek/:id"
-                       render={() =>
-                           // <ProtectedRoute>
-                               <MediaPage/>
-                           // </ProtectedRoute>
-                       }
-                />
-                <Route exact
-                       path="/proyek/:idMedia/:idUser"
-                       render={() =>
-                           // <ProtectedRoute>
-                               <MediaDetailPage/>
-                           // </ProtectedRoute>
-                       }
-                />
-                <Route exact path="/login"><LoginPage/></Route>
-                <Route exact path="/">
-                    <Redirect to="/login"/>
-                </Route>
-            </IonRouterOutlet>
-        </IonReactRouter>
-    </IonApp>
-);
+const App: React.FC = () => {
+    const ionRouter = useIonRouter();
+    useEffect(() => {
+        document.addEventListener("ionBackButton", (ev: any) => {
+            ev.detail.register(-1, () => {
+                if (!ionRouter.canGoBack()) {
+                    CapApp.exitApp();
+                }
+            });
+        });
+    }, [ionRouter]);
+    return (
+        <IonApp>
+            <IonReactRouter>
+                <IonRouterOutlet>
+                    <Route exact
+                           path="/proyek"
+                           render={() =>
+                               <ProtectedRoute>
+                                   <Proyek/>
+                               </ProtectedRoute>
+                           }
+                    />
+                    <Route exact
+                           path="/proyek/:id"
+                           render={() =>
+                               <ProtectedRoute>
+                                   <MediaPage/>
+                               </ProtectedRoute>
+                           }
+                    />
+                    <Route exact
+                           path="/proyek/:idMedia/:idUser"
+                           render={() =>
+                               <ProtectedRoute>
+                                   <MediaDetailPage/>
+                               </ProtectedRoute>
+                           }
+                    />
+                    <Route exact path="/login"><LoginPage/></Route>
+                    <Route exact path="/">
+                        <Redirect to="/login"/>
+                    </Route>
+                </IonRouterOutlet>
+            </IonReactRouter>
+        </IonApp>
+    );
+}
 
 export default App;

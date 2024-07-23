@@ -20,12 +20,15 @@ export default function LoginPage() {
         name: "login",
         options: {
             onSuccess: (data) => {
-                // auth.login(data)
+                auth.login(data)
                 history.push("/proyek")
             },
-            onError: () => {
-                // message.error("Username atau password salah!")
-                history.push("/proyek")
+            onError: async (error:any) => {
+                if(error?.response?.status === 500){
+                    await message.error("Tidak dapat menghubungi server!")
+                    return
+                }
+                await message.error("Username atau password salah!")
             }
         }
     });
@@ -35,7 +38,6 @@ export default function LoginPage() {
 
         // @ts-ignore
         mutate({
-            id: 5,
             ...payload
         });
     }

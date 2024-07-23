@@ -1,9 +1,9 @@
 import {IonContent, IonPage, IonRefresher, IonRefresherContent} from '@ionic/react';
-import {List, Skeleton} from "antd";
+import {List} from "antd";
 import {useGetList} from "../hooks/useApi";
 import ProyekEntity from "../entity/proyek";
-import {Link} from "react-router-dom";
 import {useHistory} from "react-router";
+import SkeletonList from "./shared/skeleton-list";
 
 const Proyek: React.FC = () => {
     const history = useHistory()
@@ -13,7 +13,7 @@ const Proyek: React.FC = () => {
         params: {}
     })
 
-    function handleProyekClick(item: ProyekEntity){
+    function handleProyekClick(item: ProyekEntity) {
         history.push(`/proyek/${item.id_proyek}`)
     }
 
@@ -35,13 +35,7 @@ const Proyek: React.FC = () => {
                 </div>
                 {
                     isLoading ?
-                        <div className={"p-4 space-y-2"}>
-                            {
-                                [1, 2, 3, 4].map(() => <Skeleton active={isLoading} loading={isLoading}/>)
-                            }
-
-                        </div>
-
+                        <SkeletonList isLoading={isLoading}/>
                         : <List
                             itemLayout="horizontal"
                             dataSource={data}
@@ -56,9 +50,7 @@ const Proyek: React.FC = () => {
                                 </List.Item>
                             )}
                         />
-
                 }
-
             </IonContent>
         </IonPage>
     );

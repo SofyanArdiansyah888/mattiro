@@ -41,7 +41,7 @@ export function useGetDetail<T>({
 interface IPOST {
     name: string;
     endpoint: string;
-    options?: UseMutationOptions
+    options?: UseMutationOptions | any
 }
 
 
@@ -93,19 +93,22 @@ export function usePut({
 export function useDelete({
                               name,
                               endpoint,
+    options
                           }: IPOST) {
     const queryClient = useQueryClient()
     return useMutation({
         onSuccess: async () => {
+            message.success("Berhasil")
             return await queryClient.invalidateQueries({
                 queryKey: [name]
             })
         },
         onError: () => {
-
+            message.error("Gagal menghapus data!")
         },
         mutationFn: (id: string) => {
             return destroy(id, endpoint)
         },
+        ...options
     })
 }
