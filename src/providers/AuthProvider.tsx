@@ -32,7 +32,7 @@ export const AuthProvider = ({ children }: IAuthProvider) => {
   // call this function to sign out logged in user
   const logout = () => {
     setUser(null);
-    if (history) history.replace("/");
+    if (history) history.replace("/login");
   };
 
   const value: IValue = useMemo(
